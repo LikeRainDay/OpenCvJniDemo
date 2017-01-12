@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">OpenCvJniDemo</string>
+    <string name="state_instance">动态实例</string>
+    <string name="dynamic_instance">静态实例</string>
+</resources>
