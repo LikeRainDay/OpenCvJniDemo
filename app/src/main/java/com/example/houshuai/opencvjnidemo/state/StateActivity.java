@@ -19,20 +19,35 @@ import com.example.houshuai.opencvjnidemo.R;
 
 public class StateActivity extends AppCompatActivity {
 
+    private Button mButton;
+    private StateJni mJni;
+    private ImageView mImageView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acticity_state_deal);
-        Button mButton = (Button) findViewById(R.id.btn_show_image);
-        final ImageView mImageView = (ImageView) findViewById(R.id.iv_show_image);
-        final StateJni stateJni = new StateJni();
+        //初始化
+        init();
+        dealLogic();
+
+
+    }
+
+    private void init() {
+        mButton = (Button) findViewById(R.id.btn_show_JNI_image);
+        mImageView = (ImageView) findViewById(R.id.iv_state_deal_predata);
+        mJni = new StateJni();  //初始化为JNI的调用
+    }
+
+    private void dealLogic() {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int[] ints = stateJni.dealStateImage(BitmapFactory.decodeResource(getResources(), R.drawable.image), 0x1);
+                int[] ints = mJni.dealStateImage(BitmapFactory.decodeResource(getResources(), R.drawable.image), 0x1);
                 Bitmap bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.image)).getBitmap();
-                Bitmap resultBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-                resultBitmap.setPixels(ints,0,bitmap.getWidth(),0,0,bitmap.getWidth(),bitmap.getHeight());
+                Bitmap resultBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.RGB_565);
+                resultBitmap.setPixels(ints, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
                 mImageView.setImageBitmap(resultBitmap);
             }
         });

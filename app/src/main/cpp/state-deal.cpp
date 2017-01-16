@@ -64,7 +64,7 @@ cv::Mat bitmap2Mat(JNIEnv *env, jobject bitmap) {
 
     //解析当前的Bitmap
     if ((ret = AndroidBitmap_getInfo(env, bitmap, &btmpInfo)) < 0) {
-//        LOGW("AndroidBitmap_getInfo() failed ! error=%d", ret);
+        LOGW("AndroidBitmap_getInfo() failed ! error=%d", ret);
         return nullMat;
     }
     /**

@@ -15,9 +15,13 @@ add_library(lib_opencv  SHARED   IMPORTED)
 set_target_properties(lib_opencv     PROPERTIES     IMPORTED_LOCATION
      ${opencv_lib_dir}/${ANDROID_ABI}/libopencv_java3.so)
 
-#add_library(dynamic-deal
-#            SHARED
-#            src/main/cpp/dynamic-deal.cpp )
+add_library(dynamic-deal
+
+            SHARED
+
+            src/main/cpp/dynamic-deal.cpp
+            src/main/cpp/lang.h
+            src/main/cpp/dynamic-deal-head.h )
 add_library(state-deal
 
             SHARED
@@ -25,16 +29,15 @@ add_library(state-deal
             src/main/cpp/state-deal.cpp
             src/main/cpp/lang.h
             src/main/cpp/state-deal-header.h)
-find_library( # Sets the name of the path variable.
-                 log-lib
+find_library(log-lib
               # Specifies the name of the NDK library that
               # you want CMake to locate.
-                 log )
+              log )
 
 #dynamic-deal
 target_link_libraries( state-deal
                        lib_opencv
-
+                       dynamic-deal
 
                        jnigraphics
 

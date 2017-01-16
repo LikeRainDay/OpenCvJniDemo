@@ -1,18 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/iv_show_image"
+    <LinearLayout
+        android:id="@+id/ll_show"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="400dp"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_show_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="展示"
-        />
+        <ImageView
+            android:id="@+id/iv_state_deal_predata"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:id="@+id/iv_state_deal_result"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scaleType="fitXY" />
+
+    </LinearLayout>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/ll_show">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_show_JNI_image"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:background="@drawable/state_button_background"
+                android:text="JNI调用后原图"
+                android:textColor="#FFF" />
+
+            <Button
+                android:id="@+id/btn_show_Grass_image"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:background="@drawable/state_button_background"
+                android:text="灰度图"
+                android:textColor="#FFF" />
+
+            <Button
+                android:id="@+id/btn_show_Histogram_image"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:background="@drawable/state_button_background"
+                android:text="直方图"
+                android:textColor="#FFF" />
+
+            <Button
+                android:id="@+id/btn_show_FaceDetel_image"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:background="@drawable/state_button_background"
+                android:text="人脸区域检测"
+                android:textColor="#FFF" />
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+
 </RelativeLayout>
