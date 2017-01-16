@@ -8,6 +8,6 @@
 #include <jni.h>
 #include <string>
 #include <stdlib.h>
-#include "log.h"
+//#include "log.h"
 
 #endif //FACERECOGNITION_LANG_H

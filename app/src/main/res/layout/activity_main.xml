@@ -14,14 +14,14 @@
         android:id="@+id/btn_state_button"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:text="@string/state_instance" />
+        android:text="@string/dynamic_instance" />
 
     <Button
         android:id="@+id/btn_dynamic_button"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_below="@id/btn_state_button"
-        android:text="@string/dynamic_instance" />
+        android:text="@string/state_instance" />
 
 
 </RelativeLayout>
