@@ -11,6 +11,7 @@ public class IntJni {
 
     static {
         System.loadLibrary("int-deal");
+        System.loadLibrary("opencv_java3");
     }
 
     public final native int[] intDetect(int[] data, int weight, int height,int type);

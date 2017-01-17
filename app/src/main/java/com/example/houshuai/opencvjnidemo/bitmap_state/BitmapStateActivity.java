@@ -126,4 +126,5 @@ public class BitmapStateActivity extends AppCompatActivity {
         resultBitmap.setPixels(ints, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
         mResImageView.setImageBitmap(resultBitmap);
     }
+
 }

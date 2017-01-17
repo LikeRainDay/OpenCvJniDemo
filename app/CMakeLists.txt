@@ -51,16 +51,16 @@ target_link_libraries( state-deal
 
                        lib_opencv
 
-                       ${log-lib})
+                       $\{log-lib})
 #int图片处理生成的.so链接的目标Libaries
 target_link_libraries(int-deal
 
                       lib_opencv
 
-                      ${log-lib})
+                      $\{log-lib})
 #静态图片处理生成的.so链接的目标Libaries
 target_link_libraries(dynamic-deal
 
                       lib_opencv
 
-                      ${log-lib})
+                      $\{log-lib})

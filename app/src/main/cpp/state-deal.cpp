@@ -72,7 +72,7 @@ cv::Mat bitmap2Mat(JNIEnv *env, jobject bitmap) {
 
     //解析当前的Bitmap
     if ((ret = AndroidBitmap_getInfo(env, bitmap, &btmpInfo)) < 0) {
-        LOGW("AndroidBitmap_getInfo() failed ! error=%d", ret);
+//        LOGW("AndroidBitmap_getInfo() failed ! error=%d", ret);
         return nullMat;
     }
     /**
@@ -92,18 +92,24 @@ cv::Mat bitmap2Mat(JNIEnv *env, jobject bitmap) {
 //        LOGW("First Bitmap LockPixels Failed return=%d!", ret);
         return nullMat;
     }
-    //解除锁定的像素
-    AndroidBitmap_unlockPixels(env, bitmap);
+
 
     heiht = btmpInfo.height;
     width = btmpInfo.width;
     cv::Mat src(heiht, width, CV_8UC4, btmpPixels);
+    cv::Mat dst = src.clone();
+    // init our output image
+    float alpha = 1.9;
+    float beta = -80;
+    dst.convertTo(dst, -1, alpha, beta);
+    //解除锁定的像素
+    AndroidBitmap_unlockPixels(env, bitmap);
 
-    if (!src.data) {
+    if (!dst.data) {
 //        LOGW("bitmap failed convert to Mat return=%d!", ret);
         return nullMat;
     }
-    return src;
+    return dst;
 }
 
 

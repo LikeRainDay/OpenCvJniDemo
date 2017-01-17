@@ -9,6 +9,8 @@ public class DynamicJni {
 
     static {
         System.loadLibrary("dynamic-deal");
+        System.loadLibrary("opencv_java3");
+
     }
 
     /**
