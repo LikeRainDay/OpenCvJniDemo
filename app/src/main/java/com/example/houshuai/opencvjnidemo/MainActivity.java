@@ -8,7 +8,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.example.houshuai.opencvjnidemo.dynamic.DynamicActivity;
-import com.example.houshuai.opencvjnidemo.state.StateActivity;
+import com.example.houshuai.opencvjnidemo.bitmap_state.BitmapStateActivity;
+import com.example.houshuai.opencvjnidemo.int_state.IntActivity;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
@@ -19,8 +20,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         setContentView(R.layout.activity_main);
         Button mDynamic = (Button) findViewById(R.id.btn_dynamic_button);
         Button mState = (Button) findViewById(R.id.btn_state_button);
+        Button mInt = (Button) findViewById(R.id.btn_int_button);
         mDynamic.setOnClickListener(this);
         mState.setOnClickListener(this);
+        mInt.setOnClickListener(this);
     }
 
     @Override
@@ -30,7 +33,10 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 skipActivity(DynamicActivity.class);
                 break;
             case R.id.btn_state_button:
-                skipActivity(StateActivity.class);
+                skipActivity(BitmapStateActivity.class);
+                break;
+            case R.id.btn_int_button:
+                skipActivity(IntActivity.class);
                 break;
         }
     }

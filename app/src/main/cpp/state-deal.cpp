@@ -11,7 +11,7 @@ cv::Mat bitmap2Mat(JNIEnv *env, jobject bitmap);
 
 jintArray getTypeResult(JNIEnv *env, cv::Mat mat, jint type);
 
-JNIEXPORT jintArray  JNICALL Java_com_example_houshuai_opencvjnidemo_state_StateJni_dealStateImage
+JNIEXPORT jintArray  JNICALL Java_com_example_houshuai_opencvjnidemo_state_BitmapStateJni_dealStateImage
         (JNIEnv *env, jobject object, jobject bitmap, jint type) {
     //结果数组
     jintArray result;
@@ -33,22 +33,29 @@ JNIEXPORT jintArray  JNICALL Java_com_example_houshuai_opencvjnidemo_state_State
  * */
 
 jintArray getTypeResult(JNIEnv *env, cv::Mat mat, jint type) {
+    int size = mat.rows * mat.cols;
+    jintArray result = env->NewIntArray(size);
+
     switch (type) {
-        case 0x1:
+        case 0x1:  //原图进行复现
+            env->SetIntArrayRegion(result, 0, size, (jint *) mat.data);
+            break;
+        case 0x2:  //进行转化为灰度图
+            cv::cvtColor(mat, mat, cv::COLOR_BGRA2GRAY,1);     //将其转化为灰度图
+            env->SetIntArrayRegion(result, 0, size, (jint *) mat.data);
+            break;
+        case 0x3:  //进行高斯模糊
 
             break;
-        case 0x2:
+        case 0x4:  //进行人脸的刚性追踪
 
-            break;
-        case 0x3:
+
+
 
             break;
         default:
             break;
     }
-    int size = mat.rows * mat.cols;
-    jintArray result = env->NewIntArray(size);
-    env->SetIntArrayRegion(result, 0, size, (jint *) mat.data);
     return result;
 }
 

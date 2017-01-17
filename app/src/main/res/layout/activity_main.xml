@@ -23,5 +23,10 @@
         android:layout_below="@id/btn_state_button"
         android:text="@string/state_instance" />
 
-
+    <Button
+        android:id="@+id/btn_int_button"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@id/btn_dynamic_button"
+        android:text="int数据处理" />
 </RelativeLayout>

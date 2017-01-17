@@ -17,11 +17,12 @@ set_target_properties(lib_opencv     PROPERTIES     IMPORTED_LOCATION
 
 add_library(dynamic-deal
 
-            SHARED
+           SHARED
 
-            src/main/cpp/dynamic-deal.cpp
-            src/main/cpp/lang.h
-            src/main/cpp/dynamic-deal-head.h )
+           src/main/cpp/dynamic-deal.cpp
+           src/main/cpp/lang.h
+           src/main/cpp/dynamic-deal-head.h )
+
 add_library(state-deal
 
             SHARED
@@ -29,16 +30,34 @@ add_library(state-deal
             src/main/cpp/state-deal.cpp
             src/main/cpp/lang.h
             src/main/cpp/state-deal-header.h)
+
+
+add_library(int-deal
+
+            SHARED
+
+            src/main/cpp/int-deal.cpp
+            src/main/cpp/int-deal-head.h)
+
 find_library(log-lib
               # Specifies the name of the NDK library that
               # you want CMake to locate.
               log )
 
 #dynamic-deal
+
+#静态图片处理生成的.so链接的目标Libaries
 target_link_libraries( state-deal
                        lib_opencv
-                       dynamic-deal
-
-                       jnigraphics
 
                        ${log-lib})
+#int图片处理生成的.so链接的目标Libaries
+target_link_libraries(int-deal
+                      lib_opencv
+
+                      ${log-lib})
+#动态图片处理生成的.so链接的目标Libaries
+target_link_libraries(dynamic-deal
+                      lib_opencv
+
+                      ${log-lib})
