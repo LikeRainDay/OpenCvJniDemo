@@ -45,8 +45,6 @@ public class IntActivity extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.acticity_int_deal);
         //初始化控件
         initWidget();
-        //初始化逻辑
-        initLogic();
     }
 
     private void initWidget() {
@@ -79,6 +77,8 @@ public class IntActivity extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
+        //初始化图片的数据逻辑
+        initLogic();
         long performance = System.currentTimeMillis();
         if (null == mInits) {
             mInits = new int[mWidth * mHeight];

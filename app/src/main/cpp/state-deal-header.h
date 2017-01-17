@@ -22,7 +22,7 @@ extern "C" {
  * Method:    dealStateImage
  * Signature: (Ljava/lang/Object;I)V
  */
-JNIEXPORT jintArray  JNICALL Java_com_example_houshuai_opencvjnidemo_state_BitmapStateJni_dealStateImage
+JNIEXPORT jintArray  JNICALL Java_com_example_houshuai_opencvjnidemo_bitmap_1state_BitmapStateJni_dealStateImage
   (JNIEnv *, jobject, jobject, jint);
 
 #ifdef __cplusplus

@@ -12,6 +12,8 @@
 #include <string>
 #include <stdlib.h>
 #include "log.h"
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -21,7 +23,7 @@ extern "C" {
  * Signature: ([IIII)[I
  */
 JNIEXPORT jintArray JNICALL Java_com_example_houshuai_opencvjnidemo_int_1state_IntJni_intDetect
-  (JNIEnv *, jobject, jintArray, jint, jint, jint);
+        (JNIEnv *, jobject, jintArray, jint, jint, jint);
 
 #ifdef __cplusplus
 }

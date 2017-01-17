@@ -6,8 +6,6 @@ package com.example.houshuai.opencvjnidemo.bitmap_state;
  */
 
 public class BitmapStateJni {
-
-
     static {
         System.loadLibrary("state-deal");
     }

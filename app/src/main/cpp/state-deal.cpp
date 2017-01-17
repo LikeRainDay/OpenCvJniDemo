@@ -11,7 +11,7 @@ cv::Mat bitmap2Mat(JNIEnv *env, jobject bitmap);
 
 jintArray getTypeResult(JNIEnv *env, cv::Mat mat, jint type);
 
-JNIEXPORT jintArray  JNICALL Java_com_example_houshuai_opencvjnidemo_state_BitmapStateJni_dealStateImage
+JNIEXPORT jintArray  JNICALL Java_com_example_houshuai_opencvjnidemo_bitmap_1state_BitmapStateJni_dealStateImage
         (JNIEnv *env, jobject object, jobject bitmap, jint type) {
     //结果数组
     jintArray result;
@@ -38,14 +38,15 @@ jintArray getTypeResult(JNIEnv *env, cv::Mat mat, jint type) {
 
     switch (type) {
         case 0x1:  //原图进行复现
-            env->SetIntArrayRegion(result, 0, size, (jint *) mat.data);
+            env->SetIntArrayRegion(result, 0, size, (const jint *) mat.data);
             break;
         case 0x2:  //进行转化为灰度图
-            cv::cvtColor(mat, mat, cv::COLOR_BGRA2GRAY,1);     //将其转化为灰度图
-            env->SetIntArrayRegion(result, 0, size, (jint *) mat.data);
+            cv::cvtColor(mat, mat, cv::COLOR_BGRA2GRAY, 1);     //将其转化为灰度图
+            env->SetIntArrayRegion(result, 0, size, (const jint *) mat.data);
             break;
         case 0x3:  //进行高斯模糊
-
+            cvSmooth(&mat, &mat, CV_GAUSSIAN, 11, 0, 0, 0);
+            env->SetIntArrayRegion(result, 0, size, (const jint *) mat.data);
             break;
         case 0x4:  //进行人脸的刚性追踪
 

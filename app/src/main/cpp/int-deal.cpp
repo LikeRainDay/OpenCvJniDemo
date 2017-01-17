@@ -14,11 +14,12 @@ jintArray JNICALL Java_com_example_houshuai_opencvjnidemo_int_1state_IntJni_intD
     if (NULL == srcData) {
         return 0;
     }
+    int size = w * h;
+    jintArray result = env->NewIntArray(size);
     switch (type) {
         case 1://原图展示
         {
-
-
+            env->SetIntArrayRegion(result, 0, size, srcData);
             break;
         }
         case 2://灰度图
@@ -36,34 +37,32 @@ jintArray JNICALL Java_com_example_houshuai_opencvjnidemo_int_1state_IntJni_intD
                     srcData[w * i + j] = color;
                 }
             }
-            int size = w * h;
-            jintArray result = env->NewIntArray(size);
             env->SetIntArrayRegion(result, 0, size, srcData);
-            //进行释放当前的类型
-            env->ReleaseIntArrayElements(data, srcData, 0);
-            return result;
+            break;
         }
         case 3://高斯模糊
         {
-            cv::Mat src(w, h, CV_8UC4);
+            cv::Mat src(h,w, CV_8UC4, (unsigned char *) srcData);
             cvSmooth(&src, &src, CV_GAUSSIAN, 11, 0, 0, 0);
-            int size = w * h;
-            jintArray result = env->NewIntArray(size);
             env->SetIntArrayRegion(result, 0, size, (const jint *) src.data);
-            //进行释放当前的类型
-            env->ReleaseIntArrayElements(data, srcData, 0);
-            return result;
+            break;
         }
 
         case 4://非刚性人脸追踪
         {
 
-            break;
+            cv::Mat src(h,w, CV_8UC4, (unsigned char *) srcData);
+            cv::cvtColor(src, src, cv::COLOR_BGRA2GRAY, 0);
+            env->SetIntArrayRegion(result, 0, size, (const jint *) src.data);
 
+
+            break;
         }
         default:
             break;
     }
-
+    //进行释放当前的类型
+    env->ReleaseIntArrayElements(data, srcData, 0);
+    return result;
 
 }

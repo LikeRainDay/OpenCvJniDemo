@@ -56,7 +56,8 @@ public class BitmapStateActivity extends AppCompatActivity {
         showState_Non_rigid_Face_Tracking();
         //转化为灰度图
         showGrayImage();
-
+        //高斯模糊
+        showState_GUSSION();
 
     }
 
@@ -82,6 +83,19 @@ public class BitmapStateActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showResult(IMAGE_NON_RIGID_FACE_TRACK);
+            }
+        });
+    }
+
+    /**
+     * Use to display the image information og bitmap after filtering by non-right face tracking
+     * 用于展示通过非刚性人脸最终后的Bitmap图像信息
+     */
+    private void showState_GUSSION() {
+        findViewById(R.id.btn_int_show_GAUSSION_image).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showResult(IMAGE_GAUSSION_BLUR);
             }
         });
     }
