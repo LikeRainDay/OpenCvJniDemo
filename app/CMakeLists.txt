@@ -20,6 +20,7 @@ add_library(dynamic-deal
            SHARED
 
            src/main/cpp/dynamic-deal.cpp
+           src/main/cpp/dynamic-class-announce.h
            src/main/cpp/lang.h
            src/main/cpp/dynamic-deal-head.h )
 

@@ -3,6 +3,28 @@
 //
 
 #include "int-deal-head.h"
+#include <vector>
+
+using namespace cv;
+using namespace std;
+
+//IplImage *change4channelTo3InIplImage(IplImage *src);
+
+/**
+ * 元数据类
+ * */
+class ft_data {
+public:
+    vector<int> symmetry;
+    vector<Vec2i> connections;
+    vector<Mat> imnames;    //用于存放当前的Mat
+    vector<vector<Point2f>> points;
+
+    //.......
+    Mat get_image(const int idx, const int flag);
+
+    vector<Point2f> get_points(const int idx, const bool flipped);
+};
 
 
 JNIEXPORT
@@ -39,30 +61,51 @@ jintArray JNICALL Java_com_example_houshuai_opencvjnidemo_int_1state_IntJni_intD
             }
             env->SetIntArrayRegion(result, 0, size, srcData);
             break;
+//            Mat src(h, w, CV_8UC4, srcData);
+////            cvCvtColor(&src, &src, cv::COLOR_BGRA2GRAY);
+//            uchar *ptr = src.ptr(0);
+//            for (int i = 0; i < w * h; i++) {
+//                int grayScale = (int) (ptr[4 * i + 2] * 0.299 + ptr[4 * i + 1] * 0.587
+//                                       + ptr[4 * i + 0] * 0.114);
+//                ptr[4 * i + 1] = (uchar) grayScale;
+//                ptr[4 * i + 2] = (uchar) grayScale;
+//                ptr[4 * i + 0] = (uchar) grayScale;
+//            }
+//            env->SetIntArrayRegion(result, 0, size, srcData);
+
         }
         case 3://高斯模糊
         {
-            cv::Mat src(h, w, CV_8UC4,  srcData);
-            cvSmooth(&src, &src, CV_GAUSSIAN, 11, 0, 0, 0);
-            env->SetIntArrayRegion(result, 0, size, srcData);
+            Mat src(h, w, CV_8UC4, (unsigned char *) srcData);
+            cvtColor(src, src, COLOR_BGRA2GRAY);
+            env->SetIntArrayRegion(result, 0, size, (const jint *) src.data);
+
+
             break;
         }
 
         case 4://非刚性人脸追踪
         {
+//            Mat myimg(h, w, CV_8UC4, (unsigned char *) srcData);
+//            IplImage image = IplImage(myimg);
+//            IplImage *image3channel = change4channelTo3InIplImage(&image);
+//            IplImage *pCannyImage = cvCreateImage(cvGetSize(image3channel), IPL_DEPTH_8U, 1);
+//            cvCanny(image3channel, pCannyImage, 50, 150, 3);
+//            int *outImage = new int[w * h];
+//            for (int i = 0; i < w * h; i++) {
+//                outImage[i] = (int) pCannyImage->imageData[i];
+//            }
+//            env->SetIntArrayRegion(result, 0, size, outImage);
 
-            cv::Mat src(h, w, CV_8UC4, srcData);
-//            cvCvtColor(&src, &src, cv::COLOR_BGRA2GRAY);
-            uchar *ptr = src.ptr(0);
-            for (int i = 0; i < w * h; i++) {
-                int grayScale = (int) (ptr[4 * i + 2] * 0.299 + ptr[4 * i + 1] * 0.587
-                                       + ptr[4 * i + 0] * 0.114);
-                ptr[4 * i + 1] = (uchar) grayScale;
-                ptr[4 * i + 2] = (uchar) grayScale;
-                ptr[4 * i + 0] = (uchar) grayScale;
-            }
 
-            env->SetIntArrayRegion(result, 0, size, srcData);
+
+
+
+
+
+
+
+
 
 
             break;
@@ -75,3 +118,23 @@ jintArray JNICALL Java_com_example_houshuai_opencvjnidemo_int_1state_IntJni_intD
     return result;
 
 }
+
+
+
+
+
+//
+//IplImage *change4channelTo3InIplImage(IplImage *src) {
+//    if (src->nChannels != 4) {
+//        return NULL;
+//    }
+//    IplImage *destImg = cvCreateImage(cvGetSize(src), IPL_DEPTH_8U, 3);
+//    for (int row = 0; row < src->height; row++) {
+//        for (int col = 0; col < src->width; col++) {
+//            CvScalar s = cvGet2D(src, row, col);
+//            cvSet2D(destImg, row, col, s);
+//        }
+//    }
+//
+//    return destImg;
+//}
