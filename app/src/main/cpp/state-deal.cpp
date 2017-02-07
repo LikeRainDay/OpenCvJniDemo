@@ -6,8 +6,13 @@
 #include "state-deal-header.h"
 
 using namespace std;
+bool isDetected = false;
 
 cv::Mat bitmap2Mat(JNIEnv *env, jobject bitmap);
+
+void detectAndDraw(cv::Mat &img,
+                   cv::CascadeClassifier &cascade,
+                   double scale);
 
 jintArray getTypeResult(JNIEnv *env, cv::Mat mat, jint type);
 
@@ -113,7 +118,96 @@ cv::Mat bitmap2Mat(JNIEnv *env, jobject bitmap) {
 }
 
 
+/**
+ * 用于进行脸部高斯模糊
+ * */
+void detectAndDraw(cv::Mat &img,
+                   cv::CascadeClassifier &cascade,
+                   double scale) {
+    int i = 0;
+    double t = 0;
+    vector<cv::Rect> faces;
+    const static cv::Scalar colors[] = {CV_RGB(0, 0, 255),
+                                        CV_RGB(0, 128, 255),
+                                        CV_RGB(0, 255, 255),
+                                        CV_RGB(0, 255, 0),
+                                        CV_RGB(255, 128, 0),
+                                        CV_RGB(255, 255, 0),
+                                        CV_RGB(255, 0, 0),
+                                        CV_RGB(255, 0, 255)};//用不同的颜色表示不同的人脸
 
+    cv::Mat gray, smallImg(cvRound(img.rows / scale), cvRound(img.cols / scale),
+                           CV_8UC1);//将图片缩小，加快检测速度
+
+    cv::cvtColor(img, gray, CV_BGR2GRAY);//因为用的是类haar特征，所以都是基于灰度图像的，这里要转换成灰度图像
+    cv::resize(gray, smallImg, smallImg.size(), 0, 0, cv::INTER_LINEAR);//将尺寸缩小到1/scale,用线性插值
+    cv::equalizeHist(smallImg, smallImg);//直方图均衡
+
+
+
+
+    cascade.detectMultiScale(smallImg, faces,
+                             1.1, 2, 0
+                                     //|CV_HAAR_FIND_BIGGEST_OBJECT
+                                     //|CV_HAAR_DO_ROUGH_SEARCH
+                                     | CV_HAAR_SCALE_IMAGE,
+                             cv::Size(30, 30));
+
+    for (vector<cv::Rect>::const_iterator r = faces.begin(); r != faces.end(); r++, i++) {
+        isDetected = true;
+        cv::Mat smallImgROI;
+        vector<cv::Rect> nestedObjects;
+        cv::Point center, left, right;
+        cv::Scalar color = colors[i % 8];
+        int radius;
+        center.x = cvRound((r->x + r->width * 0.5) * scale);//还原成原来的大小
+        center.y = cvRound((r->y + r->height * 0.5) * scale);
+        radius = cvRound((r->width + r->height) * 0.25 * scale);
+
+
+        left.x = center.x - radius;
+        left.y = cvRound(center.y - radius * 1.3);
+
+        if (left.y < 0) {
+            left.y = 0;
+        }
+
+        right.x = center.x + radius;
+        right.y = cvRound(center.y + radius * 1.3);
+
+        if (right.y > img.rows) {
+            right.y = img.rows;
+        }
+
+        cv::rectangle(img, left, right, cv::Scalar(255, 0, 0));
+
+
+        cv::Mat roi = img(cv::Range(left.y, right.y), cv::Range(left.x, right.x));
+        cv::Mat dst;
+
+        int value1 = 3, value2 = 1;
+
+        int dx = value1 * 5;    //双边滤波参数之一
+        double fc = value1 * 12.5; //双边滤波参数之一
+        int p = 50;//透明度
+        cv::Mat temp1, temp2, temp3, temp4;
+
+        //双边滤波
+        cv::bilateralFilter(roi, temp1, dx, fc, fc);
+
+        temp2 = (temp1 - roi + 128);
+
+        //高斯模糊
+        cv::GaussianBlur(temp2, temp3, cv::Size(2 * value2 - 1, 2 * value2 - 1), 0, 0);
+
+        temp4 = roi + 2 * temp3 - 255;
+
+        dst = (roi * (100 - p) + temp4 * p) / 100;
+
+
+        dst.copyTo(roi);
+    }
+}
 
 
 

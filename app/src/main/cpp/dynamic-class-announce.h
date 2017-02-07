@@ -9,6 +9,7 @@
 #include <opencv2/core/mat.hpp>
 #include <opencv2/imgproc/types_c.h>
 #include <opencv2/imgproc.hpp>
+#include <iostream>
 
 class shap_model {   //2d linear shape model
 public:
@@ -78,6 +79,91 @@ public:
     * 使用clamp函数进行尺寸修正。下面这段代码是在人脸跟踪时使用
     * */
     void clamp(const float c);
+};
+
+//训练集 的读写
+class foo {
+public:
+    cv::Mat a;
+    int b;
+
+    //写入数据到XML中
+    void write(cv::FileStorage &fs) const {
+        assert(fs.isOpened());
+        fs << "{" << "a" << a << "b" << b << "}";
+    }
+
+    //读出数据从XML中
+    void read(const cv::FileNode &node) {
+        assert(node.type() == cv::FileNode::MAP);
+        node["a"] >> a;
+        node["b"] >> b;
+    }
+};
+
+//导入XML模板
+template<class T>
+T load_ft(const char *fname) {
+    T x;
+    cv::FileStorage f(fname, cv::FileStorage::READ);
+    f["ft object"] >> x;
+    f.release();
+    return x;
+}
+
+//保存
+template<class T>
+void save_ft(const char *fname, const T &x) {
+    cv::FileStorage f(fname, cv::FileStorage::WRITE);
+    f << "ft object" << x;
+    f.release();
+}
+
+
+class path_model {
+public:
+    cv::Mat P; //normalized patch
+    //...
+    cv::Mat //response map
+            calc_response(
+            const cv::Mat &im, //image patch of search region
+            const bool sum2one = false); //normalize to sum-to-one?
+    // ...
+
+    /**
+     * 输入参数含义：
+     * images：包含多个样本图像的矩阵向量（原始含有人像的图像）
+     * psize：团块模型窗口的大小
+     * var：手工标注错误的方差（生成理想图像时使用）
+     * lambda：调整的参数（调整上一次得到的团块模型的大小，以便于当前目标函数偏导数作差）
+     * mu_init：初始步长（构造梯度下降法求团块模型时的更新速率）
+     * nsamples：随机选取的样本数量（梯度下降算法迭代的次数）
+     * visi：训练过程是否可观察标志
+     *
+     * */
+    void train(const std::vector<cv::Mat> &images, //training image patches
+               const cv::Size psize, //patch size
+               const float var = 1.0, //ideal response variance
+               const float lambda = 1e-6, //regularization weight
+               const float mu_init = 1e-3, //initial step size
+               const int nsamples = 1000, //number of samples
+               const bool visi = false); //visualize process?
+    //...
+
+    /**
+     * 求灰度图
+     * */
+    cv::Mat convert_image(const cv::Mat &im);
+
+    /**
+     *对单幅样本图像仿射变换矩阵的计算并没有迭代，采用更加简单的方式：
+     *(1)   计算手工标注点的重心
+     *(2)   对手工标注点去中心化
+     *(3)   利用最小二乘法计算样本点到参考坐标的旋转角度
+     * */
+    cv::Mat calc_simil(const cv::Mat &pts);
+
+
 };
 
 
